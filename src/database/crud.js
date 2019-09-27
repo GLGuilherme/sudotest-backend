@@ -16,7 +16,7 @@ const getUsers = (request, response) => {
     console.log(request.params.nome);
     
     // response.status(200).json(results.rows)
-    response.status(200).json( 'certo')
+    response.status(200).json( results)
   })
 }
 
