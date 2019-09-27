@@ -5,7 +5,6 @@ const db = require('./database/crud')
 const http = require('http')
 const port = 3333
 const ip = 'localhost'
-const cadastrarAluno = require('./database/crud')
 
 app.use(bodyParser.json())
 app.use(
