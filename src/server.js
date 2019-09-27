@@ -21,10 +21,11 @@ app.get('/', (request, response) => {
 app.get('/teste/:nome', db.getUsers)
 
 
+app.listen(process.env.PORT || 3333);
 
-app.listen(port, ip, () => {
+/*app.listen(port, ip, () => {
   console.log(`App runing on port http://${ip}:${port}`)
-})
+})*/
 
 /*const server = http.createServer((req, res) => {
   console.log('Recebendo uma request!')
