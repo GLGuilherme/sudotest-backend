@@ -8,7 +8,7 @@ const connect = require("./connection");
 }*/
 
 const getUsers = (request, response) => {
-  connect().query('create table ricardo', (error, results) => {
+  connect().query('select * from aluno', (error, results) => {
     if (error) {
       throw error
     }
