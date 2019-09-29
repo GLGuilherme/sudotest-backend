@@ -1,7 +1,9 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const app = express()
-const db = require('./database/crud')
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const app = express();
+
+const AlunoController = require('./controllers/AlunoController');
 
 app.use(bodyParser.json())
 app.use(
@@ -10,11 +12,11 @@ app.use(
   })
 )
 
-app.get('/', (request, response) => {
-  response.json({info: 'ricardo viadão'})
-})
+app.use(cors());
+app.use(express.json());
 
-app.get('/cadastroAluno', db.cadastraAluno)
+app.post('/cadastroAluno', AlunoController.cadastraAluno);
+app.post('/aluno', AlunoController.login);
 
 
 app.listen(process.env.PORT || 3333);
