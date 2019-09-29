@@ -14,7 +14,7 @@ app.get('/', (request, response) => {
   response.json({info: 'ricardo viadão'})
 })
 
-app.get('/teste/:nome', db.getUsers)
+app.get('/cadastroAluno', db.cadastraAluno)
 
 
 app.listen(process.env.PORT || 3333);
