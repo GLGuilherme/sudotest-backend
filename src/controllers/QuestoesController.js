@@ -3,7 +3,7 @@ const connect = require("../connection");
 module.exports = {
     async cadastraQuestao(request, response){
         const req = request.body
-        let sql = 'INSERT INTO questoes(enunciado, alternativa1, alternativa2, alternativa3, alternativa4, alternativa5, alternativacorreta) VALUES($1, $2, $3, $4, $5, $6, $7)'
+        let sql = 'INSERT INTO questoes(enunciado, alternativa1, alternativa2, alternativa3, alternativa4, alternativa5, alternativacorreta, categoria) VALUES($1, $2, $3, $4, $5, $6, $7, $8)'
 
         let values = [
             req.enunciado,
@@ -12,7 +12,8 @@ module.exports = {
             req.alternativa3,
             req.alternativa4,
             req.alternativa5,
-            req.alternativacorreta
+            req.alternativacorreta,
+            req.categoria
         ]
 
         await connect().query(sql, values, (error, results) => {
