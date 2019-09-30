@@ -25,7 +25,24 @@ module.exports = {
   },
 
 
-  login(req, res) {
-    return res.json({ login: true });
+  async login(request, response) {
+    const req = request.body
+    let sql = 'SELECT email, senha FROM aluno WHERE email = $1 and senha = $2'
+    let values = [
+      req.email,
+      req.senha
+    ]
+
+    await connect().query(sql, values, (error, results) => {
+      if(error){
+        throw error
+      }
+
+      if(results.rowCount == 1){
+        return response.json({login: true});
+      }else{
+        return response.json({login: false});
+      }
+    })
   }
 }
