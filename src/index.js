@@ -4,6 +4,7 @@ const cors = require('cors');
 const app = express();
 
 const AlunoController = require('./controllers/AlunoController');
+const QuestoesController = require('./controllers/QuestoesController');
 
 app.use(bodyParser.json())
 app.use(
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.post('/cadastroAluno', AlunoController.cadastraAluno);
 app.post('/aluno', AlunoController.login);
+app.post('/cadastroQuestao', QuestoesController.cadastraQuestao);
 
 
 app.listen(process.env.PORT || 3333);
