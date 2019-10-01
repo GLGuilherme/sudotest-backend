@@ -1,8 +1,21 @@
 const connect = require("../connection");
+const { Questoes } = require("../../app/models");
 
 module.exports = {
-    async cadastraQuestao(request, response){
-        const req = request.body
+  async cadastraQuestao(req, res) {
+    await Questoes.create(req.body)
+      .then(result => {
+        return res.json(result);
+      })
+      .catch(error => {
+        if (error.errors[0].message == "email must be unique") {
+          return res.json({ Erro: "Questão já existente" });
+        } else {
+          return res.json({ Erro: "Falha ao cadastrar questão" });
+        }
+      });
+
+    /*const req = request.body
         let sql = 'INSERT INTO questoes(enunciado, alternativa1, alternativa2, alternativa3, alternativa4, alternativa5, alternativacorreta, categoria) VALUES($1, $2, $3, $4, $5, $6, $7, $8)'
 
         let values = [
@@ -22,6 +35,6 @@ module.exports = {
             }else{
                 return response.json({questao: true})
             }
-        })
-    }
-}
+        })*/
+  }
+};
