@@ -9,7 +9,9 @@ module.exports = {
       })
       .catch(error => {
         if (error.errors[0].message == "email must be unique") {
-          return res.json({ Erro: "Email já existente" });
+          return res.json({ Erro: "Email já cadastrado" });
+        } else if (error.errors[0].message == "cpf must be unique") {
+          return res.json({ Erro: "CPF já cadastrado" });
         } else {
           return res.json({ Erro: "Falha ao cadastrar" });
         }
