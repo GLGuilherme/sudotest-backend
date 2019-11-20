@@ -5,6 +5,7 @@ const app = express();
 
 const AlunoController = require('./controllers/AlunoController');
 const QuestoesController = require('./controllers/QuestoesController');
+const ProvasController = require('./controllers/ProvasController');
 
 app.use(bodyParser.json())
 app.use(
@@ -20,6 +21,8 @@ app.use(express.json());
 app.post('/cadastroAluno', AlunoController.cadastraAluno);
 app.post('/aluno', AlunoController.login);
 app.post('/cadastroQuestao', QuestoesController.cadastraQuestao);
+app.post('/cadastroProva', ProvasController.cadastraProvas);
+app.post('/token', ProvasController.token);
 
 
 app.listen(process.env.PORT || 3333);

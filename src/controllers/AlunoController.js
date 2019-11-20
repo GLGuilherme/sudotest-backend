@@ -37,7 +37,7 @@ module.exports = {
   },
 
   async login(req, res) {
-    Alunos.findOne({ where: { email: req.body.email, senha: req.body.senha } })
+    await Alunos.findOne({ where: { email: req.body.email, senha: req.body.senha } })
       .then(alunos => {
         if (!alunos) {
           return res.json({ login: false });
