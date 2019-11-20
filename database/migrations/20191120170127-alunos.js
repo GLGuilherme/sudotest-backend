@@ -1,13 +1,15 @@
+'use strict';
+
 module.exports = {
   up: (queryInterface, DataTypes) => {
-    return queryInterface.createTable('Users', {
+    return queryInterface.createTable('Alunos', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      name: {
+      nome: {
         allowNull: false,
         type: DataTypes.STRING,
       },
@@ -16,9 +18,22 @@ module.exports = {
         type: DataTypes.STRING,
         unique: true,
       },
-      password: {
+      senha: {
         allowNull: false,
         type: DataTypes.STRING,
+      },
+      telefone: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      cpf: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        unique: true,
+      },
+      idade: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
       },
       createdAt: {
         allowNull: false,
@@ -31,7 +46,7 @@ module.exports = {
     });
   },
 
-  down: (queryInterface) => {
-    return queryInterface.dropTable('Users');
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.dropTable('Alunos');
   }
 };
