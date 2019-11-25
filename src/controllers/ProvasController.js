@@ -1,17 +1,5 @@
-const { Provas, Questoes, Provas_Questoes } = require("../../app/models");
-
-async function prova_questao(idProva, idQuestao) {
-    await Provas_Questoes.create({
-        idProva: idProva,
-        idQuestao: idQuestao,
-    })
-        .then(result => {
-            console.log(result.dataValues);
-        })
-        .catch(error => {
-            console.log(error);
-        });
-}
+const { Provas, Questoes } = require("../../app/models");
+const Provas_QuestoesController = require('../controllers/Provas_QuestoesController');
 
 async function questoes(qtdQuestoes, categoria, idProva) {
     await Questoes.findAll({ where: { categoria: categoria } })
@@ -26,7 +14,7 @@ async function questoes(qtdQuestoes, categoria, idProva) {
                 if (found) {
                     console.log('Questão já existente');
                 } else {
-                    prova_questao(idProva, randomQuestoes);
+                    Provas_QuestoesController.cadastrarProvasQuestoes(idProva, randomQuestoes);
                     questoesArray.push(randomQuestoes);
                 }
             };

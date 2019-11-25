@@ -1,11 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
-    const Aluno_Prova_Questao = sequelize.define('Aluno_Prova_Questao', {
+    const Alunos_Provas_Questoes = sequelize.define('Alunos_Provas_Questoes', {
       idAluno: DataTypes.INTEGER,
       idProva: DataTypes.INTEGER,
       idQuestao: DataTypes.INTEGER,
-      resposta: DataTypes.BOOLEAN,
+      resposta: DataTypes.STRING,
       alternativaMarcada: DataTypes.STRING,
     });
   
-    return Aluno_Prova_Questao;
+    return Alunos_Provas_Questoes;
   }

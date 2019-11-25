@@ -1,8 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
-  const Aluno_Prova = sequelize.define('Aluno_Prova', {
+  const Alunos_Provas = sequelize.define('Alunos_Provas', {
     idAluno: DataTypes.INTEGER,
     idProva: DataTypes.INTEGER,
   });
 
-  return Aluno_Prova;
+  return Alunos_Provas;
 }

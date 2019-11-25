@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, DataTypes) => {
-    return queryInterface.createTable('Aluno_Prova', {
+    return queryInterface.createTable('Alunos_Provas_Questoes', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -25,6 +25,22 @@ module.exports = {
           key: 'id'
         }
       },
+      idQuestao: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Questoes',
+          key: 'id'
+        }
+      },
+      resposta: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      alternativaMarcada: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
@@ -37,6 +53,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Aluno_Prova');
+    return queryInterface.dropTable('Alunos_Provas_Questoes');
   }
 };
