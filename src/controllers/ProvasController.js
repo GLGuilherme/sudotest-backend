@@ -25,6 +25,20 @@ async function questoes(qtdQuestoes, categoria, idProva) {
         })
 }
 
+async function deletarProva(idProva) {
+    await Provas.destroy({
+        where: {
+            id: idProva,
+        }
+    }, onDelete)
+        .then(result => {
+            console.log(result);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+}
+
 /*async function buscarProvas(req, res) {
     await Provas.findAll()
         .then(result => {
@@ -64,4 +78,39 @@ module.exports = {
                 return res.json(error);
             })
     },
+
+    async buscarToken(req, res) {
+        await Provas.findOne({
+            where: {
+                token: req.query.token,
+            }
+        })
+            .then(result => {
+                return res.json(result);
+            })
+            .catch(error => {
+                return res.json(error);
+            })
+    },
+
+    async atualizarProva(req, res) {
+        await Provas.destroy({
+            where: {
+                id: req.body.id,
+            }
+        }, onDelete)
+            .then(async result => {
+                await Provas.create(req, res)
+                    .then(result => {
+                        return res.json(result);
+                    })
+                    .catch(error => {
+                        return res.json(error);
+                    })
+                console.log(result);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
 }
