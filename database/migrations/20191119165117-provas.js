@@ -9,23 +9,31 @@ module.exports = {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      tempoExecucao: {
+      horaInicio: {
+        allowNull: false,
+        type: DataTypes.TIME,
+      },
+      horaTermino: {
+        allowNull: false,
+        type: DataTypes.TIME,
+      },
+      nomeProva: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      qtdQuestoesMatematica: {
         allowNull: false,
         type: DataTypes.INTEGER,
       },
-      qtdMatematica: {
+      qtdQuestoesPortugues: {
         allowNull: false,
         type: DataTypes.INTEGER,
       },
-      qtdPortugues: {
+      qtdQuestoesInformatica: {
         allowNull: false,
         type: DataTypes.INTEGER,
       },
-      qtdInformatica: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-      },
-      qtdConhecimentosGerais: {
+      qtdQuestoesConhecimentosGerais: {
         allowNull: false,
         type: DataTypes.INTEGER,
       },
@@ -37,7 +45,7 @@ module.exports = {
         allowNull: false,
         type: DataTypes.DATEONLY,
       },
-      qtdVagas: {
+      vagasDisponiveis: {
         allowNull: false,
         type: DataTypes.INTEGER,
       },

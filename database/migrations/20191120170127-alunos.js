@@ -28,7 +28,7 @@ module.exports = {
       },
       cpf: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         unique: true,
       },
       idade: {

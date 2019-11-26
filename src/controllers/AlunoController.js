@@ -38,6 +38,20 @@ module.exports = {
     })*/
   },
 
+  async buscarAluno(req, res) {
+    await Alunos.findOne({
+      where: {
+        id: req.query.id
+      }
+    })
+      .then(result => {
+        return res.json(result);
+      })
+      .catch(error => {
+        return res.json(error);
+      })
+  },
+
   async login(req, res) {
     await Alunos.findOne({ where: { email: req.body.email, senha: req.body.senha } })
       .then(alunos => {
