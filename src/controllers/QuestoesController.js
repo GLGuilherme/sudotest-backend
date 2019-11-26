@@ -42,5 +42,19 @@ module.exports = {
       .catch(error => {
         return res.json(error);
       })
+  },
+
+  async buscarQuestoes(req, res) {
+    await Questoes.findAll({
+      where: {
+        id: req,
+      }
+    })
+      .then(result => {
+        return res.json(result);
+      })
+      .catch(error => {
+        return res.json(error);
+      })
   }
 };

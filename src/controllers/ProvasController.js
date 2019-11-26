@@ -25,17 +25,17 @@ async function questoes(qtdQuestoes, categoria, idProva) {
         })
 }
 
-async function deletarProva(idProva) {
-    await Provas.destroy({
-        where: {
-            id: idProva,
-        }
-    }, onDelete)
-        .then(result => {
-            console.log(result);
+async function provasCreate(req, res) {
+    await Provas.create(req.body)
+        .then(async result => {
+            await questoes(req.body.qtdQuestoesPortugues, 'portugues', result.id);
+            await questoes(req.body.qtdQuestoesMatematica, 'matematica', result.id);
+            await questoes(req.body.qtdQuestoesInformatica, 'informatica', result.id);
+            await questoes(req.body.qtdQuestoesConhecimentosGerais, 'conhecimentos', result.id);
+            return res.json(result);
         })
         .catch(error => {
-            console.log(error);
+            return res.json(error);
         })
 }
 
@@ -52,17 +52,7 @@ async function deletarProva(idProva) {
 
 module.exports = {
     async cadastraProvas(req, res) {
-        await Provas.create(req.body)
-            .then(async result => {
-                await questoes(req.body.qtdQuestoesPortugues, 'portugues', result.id);
-                await questoes(req.body.qtdQuestoesMatematica, 'matematica', result.id);
-                await questoes(req.body.qtdQuestoesInformatica, 'informatica', result.id);
-                await questoes(req.body.qtdQuestoesConhecimentosGerais, 'conhecimentos', result.id);
-                return res.json(result);
-            })
-            .catch(error => {
-                return res.json(error);
-            })
+        provasCreate(req, res);
     },
 
     async token(req, res) {
@@ -97,20 +87,28 @@ module.exports = {
         await Provas.destroy({
             where: {
                 id: req.body.id,
-            }
-        }, onDelete)
+            },
+        })
             .then(async result => {
-                await Provas.create(req, res)
-                    .then(result => {
-                        return res.json(result);
-                    })
-                    .catch(error => {
-                        return res.json(error);
-                    })
+                await provasCreate(req, res);
                 console.log(result);
             })
             .catch(error => {
                 console.log(error);
+            })
+    },
+
+    async deletarProva(req, res) {
+        await Provas.destroy({
+            where: {
+                id: req.body.id,
+            }
+        })
+            .then(result => {
+                return res.json(result);
+            })
+            .catch(error => {
+                return res.json(error);
             })
     }
 }
