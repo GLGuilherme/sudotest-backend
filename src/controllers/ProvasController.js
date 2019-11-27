@@ -110,5 +110,19 @@ module.exports = {
             .catch(error => {
                 return res.json(error);
             })
-    }
+    },
+
+    async buscarProvas(req, res) {
+        await Provas.findAll({
+            where: {
+                status: req.query.status
+            }
+        })
+            .then(result => {
+                return res.json(result);
+            })
+            .catch(error => {
+                return res.json(error);
+            })
+    },
 }

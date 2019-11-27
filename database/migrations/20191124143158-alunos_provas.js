@@ -29,6 +29,10 @@ module.exports = {
           key: 'id'
         }
       },
+      porcentagemMedia: {
+        allowNull: false,
+        type: DataTypes.DOUBLE,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,

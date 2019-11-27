@@ -31,6 +31,7 @@ app.post('/atualizaQuestao', QuestoesController.atualizarQuestao);
 app.post('/cadastroProva', ProvasController.cadastraProvas);
 app.post('/atualizaProva', ProvasController.atualizarProva);
 app.post('/deletaProva', ProvasController.deletarProva);
+app.get('/buscaProvas', ProvasController.buscarProvas);
 
 app.post('/token', ProvasController.token);
 app.get('/buscaToken', ProvasController.buscarToken);

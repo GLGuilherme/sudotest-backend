@@ -58,7 +58,7 @@ module.exports = {
         if (!alunos) {
           return res.json({ login: false });
         } else {
-          return res.json({ login: true });
+          return res.json({ login: true, idAluno: alunos.id });
         }
       })
       .catch(error => {
