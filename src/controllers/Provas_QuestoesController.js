@@ -1,4 +1,5 @@
 const { Provas_Questoes } = require("../../app/models");
+const { buscarQuestoes } = require('./QuestoesController');
 
 module.exports = {
     async  cadastrarProvasQuestoes(idProva, idQuestao) {
@@ -20,8 +21,8 @@ module.exports = {
                 idProva: req.query.idProva,
             }
         })
-            .then(result => {
-                return res.json(result);
+            .then(async result => {
+                await buscarQuestoes(result.map(i => i.idQuestao), res);
             })
             .catch(error => {
                 return res.json(error);

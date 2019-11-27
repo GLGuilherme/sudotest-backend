@@ -12,6 +12,8 @@ module.exports = {
       idAluno: {
         allowNull: false,
         type: DataTypes.INTEGER,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
         references: {
           model: 'Alunos',
           key: 'id'
@@ -20,6 +22,8 @@ module.exports = {
       idProva: {
         allowNull: false,
         type: DataTypes.INTEGER,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
         references: {
           model: 'Provas',
           key: 'id'
@@ -28,6 +32,8 @@ module.exports = {
       idQuestao: {
         allowNull: false,
         type: DataTypes.INTEGER,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
         references: {
           model: 'Questoes',
           key: 'id'
