@@ -12,11 +12,13 @@ module.exports = {
     },
 
     async buscarAlunosProvas(req, res) {
-        await Alunos_Provas.findOne({
+        await Alunos_Provas.findAll({
             where: {
-                idAluno: req.query.idAluno,
-                idProva: req.query.idProva
-            }
+                idProva: req.query.idProva,
+            },
+            order: [
+                ['porcentagemMedia', 'DESC'],
+            ]
         })
             .then(result => {
                 return res.json(result);
