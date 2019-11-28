@@ -26,5 +26,20 @@ module.exports = {
             .catch(error => {
                 return res.json(error);
             })
+    },
+
+    async validarAlunosProvas(req, res) {
+        await Alunos_Provas.findOne({
+            where: {
+                idProva: req.query.idProva,
+                idAluno: req.query.idAluno,
+            }
+        })
+            .then(result => {
+                return res.json(result);
+            })
+            .catch(error => {
+                return res.json(error);
+            })
     }
 };
