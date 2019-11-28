@@ -1,8 +1,12 @@
 const { Alunos_Provas } = require("../../app/models");
 
 module.exports = {
-    async cadastrarAlunosProvas(req, res) {
-        await Alunos_Provas.create(req.body)
+    async cadastrarAlunosProvas(idAluno, idProva, porcentagemMedia, res) {
+        await Alunos_Provas.create({
+            idAluno,
+            idProva,
+            porcentagemMedia
+        })
             .then(result => {
                 return res.json(result);
             })
@@ -33,6 +37,21 @@ module.exports = {
             where: {
                 idProva: req.query.idProva,
                 idAluno: req.query.idAluno,
+            }
+        })
+            .then(result => {
+                return res.json(result);
+            })
+            .catch(error => {
+                return res.json(error);
+            })
+    },
+
+    async atualizarAlunoProva(req, res) {
+        await Alunos_Provas.update(req.body, {
+            where: {
+                idAluno: req.body.idAluno,
+                idProva: req.body.idProva,
             }
         })
             .then(result => {

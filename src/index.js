@@ -43,6 +43,9 @@ app.get('/validaAlunosProvas', Alunos_ProvasController.validarAlunosProvas);
 app.get('/buscaProvasQuestoes', Provas_QuestoesController.buscarProvasQuestoes);
 app.post('/cadastraAlunosProvasQuestoes', Alunos_Provas_QuestoesController.cadastrarAlunosProvasQuestoes);
 app.get('/buscaAlunosProvasQuestoes', Alunos_Provas_QuestoesController.buscarAlunosProvasQuestoes);
+app.put('/atualizaAlunosProvasQuestoes', Alunos_Provas_QuestoesController.atualizarAlunosProvasQuestoes);
+app.get('/calculaMedia', Alunos_Provas_QuestoesController.calcularMedia);
+
 app.get('/buscaAluno', AlunoController.buscarAluno);
 
 app.listen(process.env.PORT || 3333);
