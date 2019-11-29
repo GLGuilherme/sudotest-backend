@@ -39,17 +39,6 @@ async function provasCreate(req, res) {
         })
 }
 
-/*async function buscarProvas(req, res) {
-    await Provas.findAll()
-        .then(result => {
-            result.map(i => console.log(i.dataValues));
-            //return result;
-        })
-        .catch(error => {
-            //return res.json(error);
-        })
-}*/
-
 module.exports = {
     async cadastraProvas(req, res) {
         provasCreate(req, res);
@@ -125,4 +114,19 @@ module.exports = {
                 return res.json(error);
             })
     },
+
+    async buscarProvasDeletarQuestoes(req, res) {
+        await Provas.findAll({
+            where: {
+                id: req.query.idProva,
+                status: req.query.status,
+            }
+        })
+            .then(result => {
+                return res.json(result);
+            })
+            .catch(error => {
+                return res.json(error);
+            })
+    }
 }

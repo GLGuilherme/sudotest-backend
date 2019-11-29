@@ -45,43 +45,17 @@ module.exports = {
     },
 
     async calcularMedia(req, res) {
-        await Alunos_Provas.findOne({
+        await Alunos_Provas.findOrCreate({
             where: {
                 idProva: req.query.idProva,
                 idAluno: req.query.idAluno,
+            },
+            defaults: {
+                porcentagemMedia: req.query.porcentagemMedia,
             }
         })
             .then(async result => {
-                if (result === null) {
-                    await Alunos_Provas_Questoes.findAndCountAll({
-                        where: {
-                            idAluno: req.query.idAluno,
-                            idProva: req.query.idProva
-                        }
-                    })
-                        .then(async result => {
-                            let qtdQuestoes = result.count;
-                            await Alunos_Provas_Questoes.findAndCountAll({
-                                where: {
-                                    idAluno: req.query.idAluno,
-                                    idProva: req.query.idProva,
-                                    resposta: 'correta'
-                                }
-                            })
-                                .then(async result => {
-                                    let media = parseFloat(result.count * 100) / parseFloat(qtdQuestoes);
-                                    await cadastrarAlunosProvas(req.query.idAluno, req.query.idProva, media.toFixed(2), res);
-                                })
-                                .catch(error => {
-                                    return res.json(error);
-                                })
-                        })
-                        .catch(error => {
-                            return res.json(error);
-                        })
-                } else {
-                    return res.json({Erro: 'Já fez a prova'});
-                }
+                return res.json(result);
             })
             .catch(error => {
                 return res.json(error);

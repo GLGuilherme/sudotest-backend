@@ -23,15 +23,19 @@ app.use(express.json());
 
 app.post('/cadastroAluno', AlunoController.cadastraAluno);
 app.post('/aluno', AlunoController.login);
+app.get('/buscaAlunosCadastrados', AlunoController.buscarAlunosCadastrados);
 
 app.post('/cadastroQuestao', QuestoesController.cadastraQuestao);
-app.post('/deletaQuestao', QuestoesController.deletarQuestao);
-app.post('/atualizaQuestao', QuestoesController.atualizarQuestao);
+app.post('/deletaQuestaoCadastrada', QuestoesController.deletarQuestaoCadastrada);
+app.post('/atualizaQuestaoCadastrada', QuestoesController.atualizarQuestaoCadastrada);
+app.get('/buscaQuestoesCadastradas', QuestoesController.buscarQuestoesCadastradas);
+app.get('/buscaQuestaoDeletarQuestao', QuestoesController.buscarQuestaoDeletarQuestao);
 
 app.post('/cadastroProva', ProvasController.cadastraProvas);
 app.post('/atualizaProva', ProvasController.atualizarProva);
 app.post('/deletaProva', ProvasController.deletarProva);
 app.get('/buscaProvas', ProvasController.buscarProvas);
+app.get('/buscaProvasDeletarQuestoes', ProvasController.buscarProvasDeletarQuestoes);
 
 app.post('/token', ProvasController.token);
 app.get('/buscaToken', ProvasController.buscarToken);
@@ -42,6 +46,7 @@ app.get('/validaAlunosProvas', Alunos_ProvasController.validarAlunosProvas);
 app.get('/geraRelatorio', Alunos_ProvasController.gerarRelatorio);
 
 app.get('/buscaProvasQuestoes', Provas_QuestoesController.buscarProvasQuestoes);
+app.get('/buscaTodasProvasQuestoes', Provas_QuestoesController.buscarTodasProvasQuestoes);
 app.post('/cadastraAlunosProvasQuestoes', Alunos_Provas_QuestoesController.cadastrarAlunosProvasQuestoes);
 app.get('/buscaAlunosProvasQuestoes', Alunos_Provas_QuestoesController.buscarAlunosProvasQuestoes);
 app.put('/atualizaAlunosProvasQuestoes', Alunos_Provas_QuestoesController.atualizarAlunosProvasQuestoes);
