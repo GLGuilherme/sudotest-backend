@@ -1,6 +1,6 @@
 const { Alunos_Provas, Alunos } = require("../../app/models");
-Alunos.belongsTo(Alunos_Provas)
-Alunos_Provas.hasMany(Alunos)
+Alunos_Provas.belongsTo(Alunos);
+Alunos.hasMany(Alunos_Provas)
 
 module.exports = {
     async cadastrarAlunosProvas(idAluno, idProva, porcentagemMedia, res) {

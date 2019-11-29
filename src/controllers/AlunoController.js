@@ -42,6 +42,7 @@ module.exports = {
         }
       })
       .catch(error => {
+        return res.json(error);
         return res.json({ Erro: "Falha ao efetuar login" });
       });
   },
