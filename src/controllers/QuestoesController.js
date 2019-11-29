@@ -8,7 +8,7 @@ module.exports = {
         return res.json(result);
       })
       .catch(error => {
-        if (error.errors[0].message == "email must be unique") {
+        if (error.errors[0].message == "enunciado must be unique") {
           return res.json({ Erro: "Questão já existente" });
         } else {
           return res.json({ Erro: "Falha ao cadastrar questão" });
@@ -16,7 +16,7 @@ module.exports = {
       });
   },
 
-  async deletarQuestao(req, res) {
+  async deletarQuestaoCadastrada(req, res) {
     await Questoes.destroy({
       where: {
         id: req.body.id
@@ -30,7 +30,7 @@ module.exports = {
       })
   },
 
-  async atualizarQuestao(req, res) {
+  async atualizarQuestaoCadastrada(req, res) {
     await Questoes.update(req.body, {
       where: {
         id: req.body.id
@@ -47,7 +47,31 @@ module.exports = {
   async buscarQuestoes(req, res) {
     await Questoes.findAll({
       where: {
-        id: req,
+        id: req
+      }
+    })
+      .then(result => {
+        return res.json(result);
+      })
+      .catch(error => {
+        return res.json(error);
+      })
+  },
+
+  async buscarQuestoesCadastradas(req, res) {
+    await Questoes.findAll()
+      .then(result => {
+        return res.json(result);
+      })
+      .catch(error => {
+        return res.json(error);
+      })
+  },
+
+  async buscarQuestaoDeletarQuestao(req, res) {
+    await Questoes.findOne({
+      where: {
+        id: req.query.id
       }
     })
       .then(result => {

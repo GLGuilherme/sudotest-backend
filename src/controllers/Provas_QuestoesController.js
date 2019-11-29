@@ -27,5 +27,19 @@ module.exports = {
             .catch(error => {
                 return res.json(error);
             })
+    },
+
+    async buscarTodasProvasQuestoes(req, res) {
+        await Provas_Questoes.findAll({
+            where: {
+                idQuestao: req.query.idQuestao,
+            }
+        })
+            .then(result => {
+                return res.json(result.map(idProva => idProva.idProva));
+            })
+            .catch(error => {
+                return res.json(error);
+            })
     }
 };

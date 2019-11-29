@@ -16,26 +16,6 @@ module.exports = {
           return res.json({ Erro: "Falha ao cadastrar" });
         }
       });
-
-    //const req = request.body;
-    /*let sql = 'INSERT INTO aluno(nome, email, senha, telefone, cpf, idade) VALUES($1, $2, $3, $4, $5, $6);'
-    
-    let values = [
-      req.nome,
-      req.email,
-      req.senha,
-      req.telefone,
-      req.cpf,
-      req.idade
-    ]
-
-    await connect().query(sql, values, (error, results) => {
-      if (error) {
-        throw error
-      } else {
-        return response.json({ user: req.nome });
-      }
-    })*/
   },
 
   async buscarAluno(req, res) {
@@ -64,24 +44,15 @@ module.exports = {
       .catch(error => {
         return res.json({ Erro: "Falha ao efetuar login" });
       });
+  },
 
-    //const req = request.body
-    /*let sql = 'SELECT email, senha FROM "Alunos" WHERE email = $1 and senha = $2'
-    let values = [
-      req.body.email,
-      req.body.senha
-    ]*/
-
-    /*await connect().query(sql, values, (error, results) => {
-      if(error){
-        throw error
-      }
-
-      if(results.rowCount == 1){
-        return res.json({login: true});
-      }else{
-        return res.json({login: false});
-      }
-    })*/
+  async buscarAlunosCadastrados(req, res) {
+    await Alunos.findAll()
+      .then(result => {
+        return res.json(result);
+      })
+      .error(error => {
+        return res.json(error);
+      })
   }
 };
