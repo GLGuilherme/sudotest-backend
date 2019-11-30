@@ -47,6 +47,8 @@ app.get('/geraRelatorio', Alunos_ProvasController.gerarRelatorio);
 
 app.get('/buscaProvasQuestoes', Provas_QuestoesController.buscarProvasQuestoes);
 app.get('/buscaTodasProvasQuestoes', Provas_QuestoesController.buscarTodasProvasQuestoes);
+app.post('/deletaAtualizaProvasQuestoes', Provas_QuestoesController.deletarAtualizarProvasQuestoes);
+
 app.post('/cadastraAlunosProvasQuestoes', Alunos_Provas_QuestoesController.cadastrarAlunosProvasQuestoes);
 app.get('/buscaAlunosProvasQuestoes', Alunos_Provas_QuestoesController.buscarAlunosProvasQuestoes);
 app.put('/atualizaAlunosProvasQuestoes', Alunos_Provas_QuestoesController.atualizarAlunosProvasQuestoes);

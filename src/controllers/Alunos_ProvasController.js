@@ -68,41 +68,21 @@ module.exports = {
     async gerarRelatorio(req, res) {
         await Alunos_Provas.findAll({
             where: {
-                //idAluno: req.query.idAluno,
                 idProva: req.query.idProva,
             },
+            attributes: ['idAluno', 'idProva', 'porcentagemMedia'],
             order: [
                 ['porcentagemMedia', 'DESC'],
             ],
             include: [{
-                model: Alunos
+                model: Alunos,
+                attributes: ['id', 'nome', 'email', 'telefone', 'cpf', 'idade']
             }]
         })
             .then(result => {
                 return res.json(result);
-                //let porcentagemMedia = result.porcentagemMedia;
-                /*await Alunos.findOne({
-                    where: {
-                        id: req.query.idAluno
-                    }
-                })
-                    .then(result => {
-                        return res.json({
-                            idAluno: result.id,
-                            nome: result.nome,
-                            email: result.email,
-                            cpf: result.cpf,
-                            telefone: result.telefone,
-                            idade: result.idade,
-                            porcentagemMedia: porcentagemMedia,
-                        });
-                    })
-                    .catch(error => {
-                        return res.json(error);
-                    })*/
             })
             .catch(error => {
-                //console.log(error);
                 return res.json(error);
             })
     },
