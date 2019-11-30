@@ -1,6 +1,6 @@
 const { Alunos_Provas, Alunos } = require("../../app/models");
-Alunos_Provas.belongsTo(Alunos);
-Alunos.hasMany(Alunos_Provas)
+Alunos_Provas.belongsTo(Alunos, {foreignKey: 'idAluno'});
+Alunos.hasMany(Alunos_Provas, {foreignKey: 'idAluno'})
 
 module.exports = {
     async cadastrarAlunosProvas(idAluno, idProva, porcentagemMedia, res) {
@@ -66,22 +66,22 @@ module.exports = {
 
    
     async gerarRelatorio(req, res) {
-        await Alunos.findAll({
-            /*where: {
+        await Alunos_Provas.findAll({
+            where: {
                 //idAluno: req.query.idAluno,
                 idProva: req.query.idProva,
-            },*/
+            },
+            order: [
+                ['porcentagemMedia', 'DESC'],
+            ],
             include: [{
-                model: Alunos_Provas,
-                where: {
-                    idProva: req.query.idProva
-                }
+                model: Alunos
             }]
         })
-            .then(async result => {
+            .then(result => {
                 return res.json(result);
-                let porcentagemMedia = result.porcentagemMedia;
-                await Alunos.findOne({
+                //let porcentagemMedia = result.porcentagemMedia;
+                /*await Alunos.findOne({
                     where: {
                         id: req.query.idAluno
                     }
@@ -99,9 +99,10 @@ module.exports = {
                     })
                     .catch(error => {
                         return res.json(error);
-                    })
+                    })*/
             })
             .catch(error => {
+                //console.log(error);
                 return res.json(error);
             })
     },
