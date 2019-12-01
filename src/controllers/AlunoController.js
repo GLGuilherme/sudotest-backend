@@ -47,7 +47,11 @@ module.exports = {
   },
 
   async buscarAlunosCadastrados(req, res) {
-    await Alunos.findAll()
+    await Alunos.findAll({
+      order: [
+        ['nome', 'ASC']
+      ]
+    })
       .then(result => {
         return res.json(result);
       })

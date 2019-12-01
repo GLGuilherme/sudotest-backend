@@ -39,6 +39,8 @@ async function provasCreate(req, res) {
         })
 }
 
+module.exports = {questoes};
+
 module.exports = {
     async cadastraProvas(req, res) {
         provasCreate(req, res);
