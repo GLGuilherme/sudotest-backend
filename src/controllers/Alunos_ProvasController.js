@@ -1,6 +1,8 @@
-const { Alunos_Provas, Alunos } = require("../../app/models");
+const { Alunos_Provas, Alunos, Provas } = require("../../app/models");
 Alunos_Provas.belongsTo(Alunos, {foreignKey: 'idAluno'});
 Alunos.hasMany(Alunos_Provas, {foreignKey: 'idAluno'})
+Alunos_Provas.belongsTo(Provas, {foreignKey: 'idProva'});
+Provas.hasMany(Alunos_Provas, {foreignKey: 'idProva'})
 
 module.exports = {
     async cadastrarAlunosProvas(idAluno, idProva, porcentagemMedia, res) {
@@ -20,11 +22,11 @@ module.exports = {
     async buscarAlunosProvas(req, res) {
         await Alunos_Provas.findAll({
             where: {
-                idProva: req.query.idProva,
+                idAluno: req.query.idAluno,
             },
-            order: [
-                ['porcentagemMedia', 'DESC'],
-            ]
+            include: [{
+                model: Provas,
+            }]
         })
             .then(result => {
                 return res.json(result);
