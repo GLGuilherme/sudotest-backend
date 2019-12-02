@@ -1,6 +1,6 @@
 const { Provas, Questoes, Alunos_Provas } = require("../../app/models");
 const Provas_QuestoesController = require('../controllers/Provas_QuestoesController');
-
+const { Op } = require('sequelize')
 async function questoes(qtdQuestoes, categoria, idProva) {
     await Questoes.findAll({ where: { categoria: categoria } })
         .then(result => {
@@ -142,14 +142,47 @@ module.exports = {
             }]
         })
             .then(async result => {
-                await Alunos_Provas.sum('porcentagemMedia', {
+                let qtdTotal = result.count;
+                await Provas.findAndCountAll({
                     where: {
-                        idProva: req.body.id
-                    }
+                        id: req.body.id
+                    },
+                    include: [{
+                        model: Alunos_Provas,
+                        where: {
+                            porcentagemMedia: {
+                                [Op.gte]: result.rows.map(i => i.porcentagemAprovacao)
+                            }
+                        }
+                    }]
                 })
-                    .then(sum => {
-                        let mediaGeral = parseFloat(sum) / parseFloat(result.count);
-                        return res.json(mediaGeral);
+                    .then(async result => {
+                        let qtdAprovados = result.count;
+                        await Alunos_Provas.sum('porcentagemMedia', {
+                            where: {
+                                idProva: req.body.id
+                            }
+                        })
+                            .then(async sum => {
+                                let mediaGeral = parseFloat(sum) / parseFloat(qtdTotal);
+                                await Provas.update({
+                                    qtdAprovados: qtdAprovados,
+                                    mediaGeral: mediaGeral
+                                },{
+                                    where: {
+                                        id: req.body.id
+                                    },
+                                })
+                                    .then(result => {
+                                        return res.json(result);
+                                    })
+                                    .catch(error => {
+                                        return res.json(error);
+                                    })
+                            })
+                            .catch(error => {
+                                return res.json(error);
+                            })
                     })
                     .catch(error => {
                         return res.json(error);
