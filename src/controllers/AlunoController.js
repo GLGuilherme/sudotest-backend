@@ -42,13 +42,16 @@ module.exports = {
         }
       })
       .catch(error => {
-        return res.json(error);
         return res.json({ Erro: "Falha ao efetuar login" });
       });
   },
 
   async buscarAlunosCadastrados(req, res) {
-    await Alunos.findAll()
+    await Alunos.findAll({
+      order: [
+        ['nome', 'ASC']
+      ]
+    })
       .then(result => {
         return res.json(result);
       })

@@ -1,6 +1,6 @@
-const { Provas, Questoes } = require("../../app/models");
+const { Provas, Questoes, Alunos_Provas } = require("../../app/models");
 const Provas_QuestoesController = require('../controllers/Provas_QuestoesController');
-
+const { Op } = require('sequelize')
 async function questoes(qtdQuestoes, categoria, idProva) {
     await Questoes.findAll({ where: { categoria: categoria } })
         .then(result => {
@@ -38,6 +38,8 @@ async function provasCreate(req, res) {
             return res.json(error);
         })
 }
+
+module.exports = { questoes };
 
 module.exports = {
     async cadastraProvas(req, res) {
@@ -127,6 +129,68 @@ module.exports = {
             })
             .catch(error => {
                 return res.json(error);
+            })
+    },
+
+    async encerrarProva(req, res) {
+        await Provas.findAndCountAll({
+            where: {
+                id: req.body.id
+            },
+            include: [{
+                model: Alunos_Provas
+            }]
+        })
+            .then(async result => {
+                let qtdTotal = result.count;
+                await Provas.findAndCountAll({
+                    where: {
+                        id: req.body.id
+                    },
+                    include: [{
+                        model: Alunos_Provas,
+                        where: {
+                            porcentagemMedia: {
+                                [Op.gte]: result.rows.map(i => i.porcentagemAprovacao)
+                            }
+                        }
+                    }]
+                })
+                    .then(async result => {
+                        let qtdAprovados = result.count;
+                        await Alunos_Provas.sum('porcentagemMedia', {
+                            where: {
+                                idProva: req.body.id
+                            }
+                        })
+                            .then(async sum => {
+                                let mediaGeral = parseFloat(sum) / parseFloat(qtdTotal);
+                                await Provas.update({
+                                    qtdAprovados: qtdAprovados,
+                                    mediaGeral: mediaGeral,
+                                    status: 'Encerrada'
+                                },{
+                                    where: {
+                                        id: req.body.id
+                                    },
+                                })
+                                    .then(result => {
+                                        return res.json(result);
+                                    })
+                                    .catch(error => {
+                                        return res.json(error);
+                                    })
+                            })
+                            .catch(error => {
+                                return res.json(error);
+                            })
+                    })
+                    .catch(error => {
+                        return res.json(error);
+                    })
+            })
+            .catch(error => {
+                return res.json(error)
             })
     }
 }

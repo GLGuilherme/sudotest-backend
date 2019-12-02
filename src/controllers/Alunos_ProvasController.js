@@ -1,6 +1,8 @@
-const { Alunos_Provas, Alunos } = require("../../app/models");
-Alunos_Provas.belongsTo(Alunos);
-Alunos.hasMany(Alunos_Provas)
+const { Alunos_Provas, Alunos, Provas } = require("../../app/models");
+Alunos_Provas.belongsTo(Alunos, {foreignKey: 'idAluno'});
+Alunos.hasMany(Alunos_Provas, {foreignKey: 'idAluno'})
+Alunos_Provas.belongsTo(Provas, {foreignKey: 'idProva'});
+Provas.hasMany(Alunos_Provas, {foreignKey: 'idProva'})
 
 module.exports = {
     async cadastrarAlunosProvas(idAluno, idProva, porcentagemMedia, res) {
@@ -20,11 +22,11 @@ module.exports = {
     async buscarAlunosProvas(req, res) {
         await Alunos_Provas.findAll({
             where: {
-                idProva: req.query.idProva,
+                idAluno: req.query.idAluno,
             },
-            order: [
-                ['porcentagemMedia', 'DESC'],
-            ]
+            include: [{
+                model: Provas,
+            }]
         })
             .then(result => {
                 return res.json(result);
@@ -66,40 +68,21 @@ module.exports = {
 
    
     async gerarRelatorio(req, res) {
-        await Alunos.findAll({
-            /*where: {
-                //idAluno: req.query.idAluno,
+        await Alunos_Provas.findAll({
+            where: {
                 idProva: req.query.idProva,
-            },*/
+            },
+            attributes: ['idAluno', 'idProva', 'porcentagemMedia'],
+            order: [
+                ['porcentagemMedia', 'DESC'],
+            ],
             include: [{
-                model: Alunos_Provas,
-                where: {
-                    idProva: req.query.idProva
-                }
+                model: Alunos,
+                attributes: ['id', 'nome', 'email', 'telefone', 'cpf', 'idade']
             }]
         })
-            .then(async result => {
+            .then(result => {
                 return res.json(result);
-                let porcentagemMedia = result.porcentagemMedia;
-                await Alunos.findOne({
-                    where: {
-                        id: req.query.idAluno
-                    }
-                })
-                    .then(result => {
-                        return res.json({
-                            idAluno: result.id,
-                            nome: result.nome,
-                            email: result.email,
-                            cpf: result.cpf,
-                            telefone: result.telefone,
-                            idade: result.idade,
-                            porcentagemMedia: porcentagemMedia,
-                        });
-                    })
-                    .catch(error => {
-                        return res.json(error);
-                    })
             })
             .catch(error => {
                 return res.json(error);

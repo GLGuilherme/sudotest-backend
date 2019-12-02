@@ -5,8 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     senha: DataTypes.STRING,
     telefone: DataTypes.INTEGER,
     cpf: DataTypes.BIGINT,
-    idade: DataTypes.INTEGER
+    idade: DataTypes.INTEGER,
   });
-
   return Alunos;
 }
