@@ -24,7 +24,7 @@ module.exports = {
       },
       telefone: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
       },
       cpf: {
         allowNull: false,

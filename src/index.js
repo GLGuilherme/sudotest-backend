@@ -30,6 +30,7 @@ app.post('/deletaQuestaoCadastrada', QuestoesController.deletarQuestaoCadastrada
 app.post('/atualizaQuestaoCadastrada', QuestoesController.atualizarQuestaoCadastrada);
 app.get('/buscaQuestoesCadastradas', QuestoesController.buscarQuestoesCadastradas);
 app.get('/buscaQuestaoDeletarQuestao', QuestoesController.buscarQuestaoDeletarQuestao);
+app.get('/buscaInformacoesQuestao', QuestoesController.buscarInformacoesQuestao);
 
 app.post('/cadastroProva', ProvasController.cadastraProvas);
 app.post('/atualizaProva', ProvasController.atualizarProva);

@@ -58,6 +58,20 @@ module.exports = {
       })
   },
 
+  async buscarInformacoesQuestao(req, res) {
+    await Questoes.findOne({
+      where: {
+        id: req.query.id
+      }
+    })
+      .then(result => {
+        return res.json(result)
+      })
+      .catch(error => {
+        return res.json(error)
+      })
+  },
+
   async buscarQuestoesCadastradas(req, res) {
     await Questoes.findAll()
       .then(result => {
