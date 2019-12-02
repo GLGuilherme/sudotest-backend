@@ -1,7 +1,8 @@
 const { Op } = require('sequelize');
 const { Provas_Questoes, Questoes, Provas } = require("../../app/models");
 const { buscarQuestoes } = require('./QuestoesController');
-const { questoes } = require("../controllers/ProvasController");
+const Provas_QuestoesController = require('../controllers/Provas_QuestoesController');
+//const { questoes } = require("../controllers/ProvasController");
 Provas_Questoes.belongsTo(Questoes, { foreignKey: 'idQuestao' });
 Questoes.hasMany(Provas_Questoes, { foreignKey: 'idQuestao' });
 Provas_Questoes.belongsTo(Provas, { foreignKey: 'idProva' });
@@ -25,39 +26,69 @@ async function teste(idProva, idQuestao, res) {
     return resultado;
 }
 
-async function provaCreate(provas) {
-    i = 0;
-
-    while (i < provas.length) {
-        await Provas.create({
-            id: provas[i].id,
-            horaInicio: provas[i].horaInicio,
-            nomeProva: provas[i].nomeProva,
-            horaTermino: provas[i].horaTermino,
-            qtdQuestoesMatematica: provas[i].qtdQuestoesMatematica,
-            qtdQuestoesPortugues: provas[i].qtdQuestoesPortugues,
-            qtdQuestoesInformatica: provas[i].qtdQuestoesInformatica,
-            qtdQuestoesConhecimentosGerais: provas[i].qtdQuestoesConhecimentosGerais,
-            token: provas[i].token,
-            status: provas[i].status,
-            porcentagemAprovacao: provas[i].porcentagemAprovacao,
-            dataRealizacao: provas[i].dataRealizacao,
-            vagasDisponiveis: provas[i].vagasDisponiveis,
-            qtdAprovados: provas[i].qtdAprovados,
-            mediaGeral: provas[i].mediaGeral,
+async function cadastrarProvaQuestao(idProva, idQuestao) {
+    await Provas_Questoes.create({
+        idProva: idProva,
+        idQuestao: idQuestao,
+    })
+        .then(result => {
+            console.log(result);
         })
-            .then(async result => {
-                await questoes(provas[i].qtdQuestoesPortugues, 'portugues', provas[i].id);
-                await questoes(provas[i].qtdQuestoesMatematica, 'matematica', provas[i].id);
-                await questoes(provas[i].qtdQuestoesInformatica, 'informatica', provas[i].id);
-                await questoes(provas[i].qtdQuestoesConhecimentosGerais, 'conhecimentos', provas[i].id);
-                i++;
-                return res.json(result);
-            })
-            .catch(error => {
-                return res.json(error);
-            })
-    }
+        .catch(error => {
+            console.log(error);
+        });
+}
+
+async function questoes(qtdQuestoes, categoria, idProva) {
+    await Questoes.findAll({ where: { categoria: categoria } })
+        .then(result => {
+            var questoes = result.map(i => i.dataValues.id);
+            var questoesArray = [];
+            while (questoesArray.length < qtdQuestoes) {
+                randomQuestoes = questoes[Math.floor(Math.random() * questoes.length)];
+                var found = questoesArray.find(function (element) {
+                    return element == randomQuestoes;
+                })
+                if (found) {
+                    console.log('Questão já existente');
+                } else {
+                    cadastrarProvaQuestao(idProva, randomQuestoes);
+                    questoesArray.push(randomQuestoes);
+                }
+            };
+            return;
+        })
+        .catch(error => {
+            console.log(error);
+        })
+}
+
+async function provaCreate(i, res) {
+    await Provas.create({
+        id: i.id,
+        horaInicio: i.horaInicio,
+        nomeProva: i.nomeProva,
+        horaTermino: i.horaTermino,
+        qtdQuestoesMatematica: i.qtdQuestoesMatematica,
+        qtdQuestoesPortugues: i.qtdQuestoesPortugues,
+        qtdQuestoesInformatica: i.qtdQuestoesInformatica,
+        qtdQuestoesConhecimentosGerais: i.qtdQuestoesConhecimentosGerais,
+        token: i.token,
+        status: i.status,
+        porcentagemAprovacao: i.porcentagemAprovacao,
+        dataRealizacao: i.dataRealizacao,
+        vagasDisponiveis: i.vagasDisponiveis,
+        qtdAprovados: i.qtdAprovados,
+        mediaGeral: i.mediaGeral,
+    })
+        .then(async result => {
+            await questoes(i.qtdQuestoesPortugues, 'portugues', i.id);
+            await questoes(i.qtdQuestoesMatematica, 'matematica', i.id);
+            await questoes(i.qtdQuestoesInformatica, 'informatica', i.id);
+            await questoes(i.qtdQuestoesConhecimentosGerais, 'conhecimentos', i.id);
+        })
+        .catch(error => {
+        })
 }
 
 
@@ -149,161 +180,35 @@ module.exports = {
     async deletarAtualizarProvasQuestoes(req, res) {
         await Provas_Questoes.findAll({
             where: {
-                idQuestao: 6
+                idQuestao: 24
             },
             include: [{
-                model: Provas
+                model: Provas,
+                where: {
+                    status: 'Aberta'
+                }
             }]
         })
             .then(async result => {
                 let provas = result.map(i => i.Prova)
-                //return res.json(provas);
                 await Provas.destroy({
                     where: {
                         id: provas.map(i => i.id)
                     }
                 })
                     .then(async result => {
-                        provaCreate(provas);
+                        await provas.map(i => (provaCreate(i, res)))
+                        return res.json(result);
                     })
                     .catch(error => {
                         return res.json(error);
                     })
-                /*await Questoes.findAll({
-                    where: {
-                        categoria: 'portugues'
-                    }
-                })
-                    .then(async result => {
-                        let questoes = await result.map(i => i.id);*/
-                //return res.json(result)
-                //await provas.map(async element => {
-                //let tamanho = 0;
-                /*let i = 0;
-                tamanho = 0;
-                while (i <= provas.length) {
-                    let randomQuestoes = await questoes[Math.floor(Math.random() * questoes.length)];
-                    console.log(provas[i], randomQuestoes)
-                    await Provas_Questoes.findOrCreate({
-                        where: {
-                            idProva: provas[i],
-                            idQuestao: randomQuestoes
-                        }
-                    })
-                        .then(result => {
-                            if (result[1] === false) {
-                                tamanho++
-                                console.log('false')
-                            } else {
-                                i++;
-                                console.log('true')
-                            }
-                            //return res.json(result[1])
-                        })
-                        .catch(error => {
-                            //return res.json(error);
-                        })*/
-
-                /*console.log(element, randomQuestoes)
-                
-                if (await teste(element, randomQuestoes) === false) {
-                    console.log('1');
-                    tamanho++;
-                } else {
-                    console.log('2');
-                }*/
-                //}
-                //});
-                /*await provas.forEach(async element => {
-                    let tamanho = 0;
-                    while (await tamanho < questoes.length) {
-                        let randomQuestoes = await questoes[Math.floor(Math.random() * questoes.length)];
-                        console.log(element, randomQuestoes)
-                        await Provas_Questoes.findOrCreate({
-                            where: {
-                                idProva: element,
-                                idQuestao: randomQuestoes
-                            }
-                        })
-                            .then(result => {
-                                if (result[1] === false) {
-                                    tamanho++;
-                                    console.log('false')
-                                } else {
-                                    console.log('true')
-                                }
-                                //return res.json(result[1])
-                            })
-                            .catch(error => {
-                                //return res.json(error);
-                            })*/
-
-                /*console.log(element, randomQuestoes)
-                
-                if (await teste(element, randomQuestoes) === false) {
-                    console.log('1');
-                    tamanho++;
-                } else {
-                    console.log('2');
-                }*/
-                //}
-                //});
-                //return res.json(questoes)
             })
             .catch(error => {
                 return res.json(error)
             })
-            //return res.json(provas)
             .catch(error => {
                 return res.json(error);
             })
-        /*await Questoes.destroy({
-            where: {
-                id: req.body.id
-            }
-        })
-            .then(async result => {*/
-        /*await Questoes.findAll({
-            where: {
-                categoria: 'portugues',
-            },
-            include: [{
-                model: Provas_Questoes,
-                where: {
-                    idProva: {
-                        [Op.in]: [5, 26, 4]
-                    }
-                }
-            }]
-        })*/
-        /*.then(async result => {
-            //return res.json(result);
-            var questoes = await result.map(i => i.id);
-            //return res.json(questoes)
-            var questoesArray = await result.map(i => ({
-                idQuestao: i.id,
-                Provas_Questoes: i.Provas_Questoes.map(i => ({
-                    idProva: i.idProva
-                })),
-                //idQuestao: i.Provas_Questoes.map(i => i.idQuestao)
-            }));
-            randomQuestoes = await questoes[Math.floor(Math.random() * questoes.length)];
-            var found = questoesArray.map(i => i.Provas_Questoes.map(i => i.idQuestao)).find(function (element) {
-                return element == randomQuestoes;
-            })
-            console.log(found);
-            return res.json(questoesArray);
-        })
-        .catch(error => {
-            return res.json(error);
-        })
-    //})*/
-        /*.catch(error => {
-            return res.json(error);
-        })*/
     },
-
-    /*async randomQuestoes(questoes) {
-        return await questoes[Math.floor(Math.random() * questoes.length)];
-    }*/
 };
