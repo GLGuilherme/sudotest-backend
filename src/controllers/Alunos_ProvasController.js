@@ -26,7 +26,10 @@ module.exports = {
             },
             include: [{
                 model: Provas,
-            }]
+                order: [
+                    ['dataRealizacao', 'DESC']
+                ]
+            }],
         })
             .then(result => {
                 return res.json(result);

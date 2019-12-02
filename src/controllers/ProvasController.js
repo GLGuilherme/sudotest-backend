@@ -61,9 +61,20 @@ module.exports = {
     },
 
     async buscarToken(req, res) {
+        let horas = new Date().getHours();
+        let minutos = new Date().getMinutes();
         await Provas.findOne({
             where: {
                 token: req.query.token,
+                dataRealizacao: {
+                    [Op.eq]: new Date()
+                },
+                horaInicio: {
+                    [Op.gte]: new Date()
+                },
+                horaTermino: {
+                    [Op.lt]: new Date()
+                }
             }
         })
             .then(result => {
@@ -107,7 +118,10 @@ module.exports = {
         await Provas.findAll({
             where: {
                 status: req.query.status
-            }
+            },
+            order: [
+                ['dataRealizacao', 'DESC'],
+            ],
         })
             .then(result => {
                 return res.json(result);
@@ -192,5 +206,5 @@ module.exports = {
             .catch(error => {
                 return res.json(error)
             })
-    }
+    },
 }
