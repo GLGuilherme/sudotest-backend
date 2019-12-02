@@ -24,11 +24,11 @@ module.exports = {
             where: {
                 idAluno: req.query.idAluno,
             },
+            order: [
+                ['createdAt', 'ASC']
+            ],
             include: [{
                 model: Provas,
-                order: [
-                    ['dataRealizacao', 'DESC']
-                ]
             }],
         })
             .then(result => {
