@@ -123,6 +123,7 @@ module.exports = {
             },
             order: [
                 ['dataRealizacao', 'DESC'],
+                ['horaInicio', 'DESC']
             ],
         })
             .then(result => {
