@@ -180,7 +180,7 @@ module.exports = {
     async deletarAtualizarProvasQuestoes(req, res) {
         await Provas_Questoes.findAll({
             where: {
-                idQuestao: 24
+                idQuestao: req.body.idQuestao
             },
             include: [{
                 model: Provas,
@@ -191,14 +191,24 @@ module.exports = {
         })
             .then(async result => {
                 let provas = result.map(i => i.Prova)
-                await Provas.destroy({
+                await Questoes.destroy({
                     where: {
-                        id: provas.map(i => i.id)
+                        id: req.body.idQuestao
                     }
                 })
                     .then(async result => {
-                        await provas.map(i => (provaCreate(i, res)))
-                        return res.json(result);
+                        await Provas.destroy({
+                            where: {
+                                id: provas.map(i => i.id)
+                            }
+                        })
+                            .then(async result => {
+                                await provas.map(i => (provaCreate(i, res)))
+                                return res.json(result);
+                            })
+                            .catch(error => {
+                                return res.json(error);
+                            })
                     })
                     .catch(error => {
                         return res.json(error);
@@ -206,9 +216,6 @@ module.exports = {
             })
             .catch(error => {
                 return res.json(error)
-            })
-            .catch(error => {
-                return res.json(error);
             })
     },
 };
