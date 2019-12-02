@@ -61,19 +61,21 @@ module.exports = {
     },
 
     async buscarToken(req, res) {
-        let horas = new Date().getHours();
+        let horas = new Date().getUTCHours() - 3;
         let minutos = new Date().getMinutes();
+        let data = new Date(new Date() - 3 * 60 * 60 * 1000);
         await Provas.findOne({
             where: {
                 token: req.query.token,
+                status: 'Aberta',
                 dataRealizacao: {
-                    [Op.eq]: new Date()
+                    [Op.eq]: data
                 },
                 horaInicio: {
-                    [Op.gte]: new Date()
+                    [Op.lte]: horas + ':' + minutos
                 },
                 horaTermino: {
-                    [Op.lt]: new Date()
+                    [Op.gt]: horas + ':' + minutos
                 }
             }
         })
@@ -183,7 +185,7 @@ module.exports = {
                                     qtdAprovados: qtdAprovados,
                                     mediaGeral: mediaGeral,
                                     status: 'Encerrada'
-                                },{
+                                }, {
                                     where: {
                                         id: req.body.id
                                     },
