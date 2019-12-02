@@ -167,7 +167,8 @@ module.exports = {
                                 let mediaGeral = parseFloat(sum) / parseFloat(qtdTotal);
                                 await Provas.update({
                                     qtdAprovados: qtdAprovados,
-                                    mediaGeral: mediaGeral
+                                    mediaGeral: mediaGeral,
+                                    status: 'Encerrada'
                                 },{
                                     where: {
                                         id: req.body.id
