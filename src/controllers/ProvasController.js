@@ -1,4 +1,4 @@
-const { Provas, Questoes } = require("../../app/models");
+const { Provas, Questoes, Alunos_Provas } = require("../../app/models");
 const Provas_QuestoesController = require('../controllers/Provas_QuestoesController');
 
 async function questoes(qtdQuestoes, categoria, idProva) {
@@ -39,7 +39,7 @@ async function provasCreate(req, res) {
         })
 }
 
-module.exports = {questoes};
+module.exports = { questoes };
 
 module.exports = {
     async cadastraProvas(req, res) {
@@ -129,6 +129,34 @@ module.exports = {
             })
             .catch(error => {
                 return res.json(error);
+            })
+    },
+
+    async encerrarProva(req, res) {
+        await Provas.findAndCountAll({
+            where: {
+                id: req.body.id
+            },
+            include: [{
+                model: Alunos_Provas
+            }]
+        })
+            .then(async result => {
+                await Alunos_Provas.sum('porcentagemMedia', {
+                    where: {
+                        idProva: req.body.id
+                    }
+                })
+                    .then(sum => {
+                        let mediaGeral = parseFloat(sum) / parseFloat(result.count);
+                        return res.json(mediaGeral);
+                    })
+                    .catch(error => {
+                        return res.json(error);
+                    })
+            })
+            .catch(error => {
+                return res.json(error)
             })
     }
 }

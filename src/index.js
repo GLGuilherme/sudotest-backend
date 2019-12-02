@@ -36,6 +36,7 @@ app.post('/atualizaProva', ProvasController.atualizarProva);
 app.post('/deletaProva', ProvasController.deletarProva);
 app.get('/buscaProvas', ProvasController.buscarProvas);
 app.get('/buscaProvasDeletarQuestoes', ProvasController.buscarProvasDeletarQuestoes);
+app.post('/encerraProva', ProvasController.encerrarProva);
 
 app.post('/token', ProvasController.token);
 app.get('/buscaToken', ProvasController.buscarToken);
